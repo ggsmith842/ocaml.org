@@ -17,6 +17,7 @@ let term_templates =
     ("success_story", Ood_gen.Success_story.template);
     ("tool", Ood_gen.Tool.template);
     ("tutorial", Ood_gen.Tutorial.template);
+    ("tool_page", Ood_gen.Tool_page.template);
     ("workshops", Ood_gen.Workshop.template);
     ("video", Ood_gen.Video.template);
     ("planet", Ood_gen.Planet.template);
