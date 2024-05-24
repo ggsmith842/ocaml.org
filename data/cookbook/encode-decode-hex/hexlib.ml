@@ -1,8 +1,8 @@
 ---
 packages: [Hex, Cstruct]
 discussion: |
-  - **Using the Hex and Cstruct libraries to decode a hexidecimal string to an ascii string.
-  - **Using the Hex library to convert an ascii string to a hexidecimal encoded message.
+  - **Using the Hex and Cstruct libraries to decode a hexidecimal string to an ASCII string.
+  - **Using the Hex library to convert an ASCII string to a hexidecimal encoded message.
   - **Uses the Hex and Cstruct libraries.
 ---
 
