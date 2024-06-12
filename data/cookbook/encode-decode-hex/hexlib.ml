@@ -1,5 +1,13 @@
 ---
-packages: [Hex, Cstruct]
+packages:
+- name: "hex"
+  tested_version: "1.5.0"
+  used_libraries:
+  - hex
+- name: "cstruct"
+  tested_version: "6.2.0"
+  used_libraries:
+  - cstruct
 discussion: |
   - **Using the Hex and Cstruct libraries to decode a hexidecimal string to an ASCII string.
   - **Using the Hex library to convert an ASCII string to a hexidecimal encoded message.
