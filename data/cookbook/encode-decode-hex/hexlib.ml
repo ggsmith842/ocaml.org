@@ -15,15 +15,15 @@ discussion: |
 ---
 
 
-(* [decode_hex_string hex_string] is the string represented by [hex_string].
-    Raises: Invalid_argument if [hex_string] is not valid hex. *)
+(* `decode_hex_string hex_string` is the string represented by `hex_string`.
+    Raises: Invalid_argument if `hex_string` is not valid hex. *)
 let decode_hex_string hex_string =
   let byte_string = Hex.to_cstruct (`Hex hex_string) in
   let decoded_string = Cstruct.to_string byte_string in
   decoded_string
 ;;
 
-(** [encode_to_hex message] is the hex string representation of [message]. *)
+(* `encode_to_hex message` is the hex string representation of `message`. *)
 let encode_to_hex message =
   let byte_string = Cstruct.of_string message in
   let hex_string = Hex.of_cstruct byte_string in
