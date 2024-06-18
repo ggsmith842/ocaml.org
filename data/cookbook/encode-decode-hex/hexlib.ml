@@ -16,29 +16,30 @@ discussion: |
 
 
 (* `decode_hex_string hex_string` is the string represented by `hex_string`.
-    Raises: Invalid_argument if `hex_string` is not valid hex. *)
+   Raises: Invalid_argument if `hex_string` is not valid hex. *)
 let decode_hex_string hex_string =
   let byte_string = Hex.to_cstruct (`Hex hex_string) in
   let decoded_string = Cstruct.to_string byte_string in
   decoded_string
 
-(* `encode_to_hex message` is the hex string representation of `message`. *)
+(* `encode_to_hex message` accepts a string `message` and returns
+   the hexidecimal representation of `message`. *)
 let encode_to_hex message =
   let byte_string = Cstruct.of_string message in
   let hex_string = Hex.of_cstruct byte_string in
-  Hex.to_string hex_string
+  Hex.show hex_string
 
 (* Example usage *)
-let secret_message = "48656c6c6f2c20576f726c6421";;
-Printf.printf "Secret message: %s\n" secret_message
+let hex_message = "48656c6c6f2c20576f726c6421";;
+Printf.printf "Hex message: %s\n" hex_message
 
-let decrypted_message = decode_hex_string secret_message;;
+let decrypted_message = decode_hex_string hex_message;;
 
 (* Show the decrypted message *)
 Printf.printf "Decoded message: %s\n" decrypted_message
 
 (* Encrypt the message back to hexidecimal *)
-let encoded_message = encode_to_hex secret_message;;
+let encoded_message = encode_to_hex decrypted_message;;
 
 (* Show the hexadecimal encoded message *)
-Printf.printf "Encoded message: %s\n" encoded_message;;
+Printf.printf "Encoded message: %s\n" encoded_message
