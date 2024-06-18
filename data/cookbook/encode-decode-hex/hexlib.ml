@@ -9,8 +9,8 @@ packages:
   used_libraries:
   - cstruct
 discussion: |
-  - **Using the Hex and Cstruct libraries to decode a hexidecimal string to an ASCII string.
-  - **Using the Hex library to convert an ASCII string to a hexidecimal encoded message.
+  - **Using the Hex and Cstruct libraries to decode a hexadecimal string to an ASCII string.
+  - **Using the Hex library to convert an ASCII string to a hexadecimal encoded message.
   - **Uses the Hex and Cstruct libraries.
 ---
 
@@ -23,7 +23,7 @@ let decode_hex_string hex_string =
   decoded_string
 
 (* `encode_to_hex message` accepts a string `message` and returns
-   the hexidecimal representation of `message`. *)
+   the hexadecimal representation of `message`. *)
 let encode_to_hex message =
   let byte_string = Cstruct.of_string message in
   let hex_string = Hex.of_cstruct byte_string in
@@ -38,7 +38,7 @@ let decrypted_message = decode_hex_string hex_message;;
 (* Show the decrypted message *)
 Printf.printf "Decoded message: %s\n" decrypted_message
 
-(* Encrypt the message back to hexidecimal *)
+(* Encrypt the message back to hexadecimal *)
 let encoded_message = encode_to_hex decrypted_message;;
 
 (* Show the hexadecimal encoded message *)
