@@ -33,13 +33,13 @@ let encode_to_hex message =
 let hex_message = "48656c6c6f2c20576f726c6421";;
 Printf.printf "Hex message: %s\n" hex_message
 
-let decrypted_message = decode_hex_string hex_message;;
+let message = decode_hex_string hex_message;;
 
 (* Show the decrypted message *)
-Printf.printf "Decoded message: %s\n" decrypted_message
+Printf.printf "Decoded message: %s\n" message
 
 (* Encrypt the message back to hexadecimal *)
-let encoded_message = encode_to_hex decrypted_message;;
+let encoded_message = encode_to_hex message;;
 
 (* Show the hexadecimal encoded message *)
 Printf.printf "Encoded message: %s\n" encoded_message
