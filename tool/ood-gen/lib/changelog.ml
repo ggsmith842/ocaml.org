@@ -1,3 +1,5 @@
+open Data_intf.Changelog
+
 type metadata = {
   title : string;
   tags : string list;
@@ -5,25 +7,13 @@ type metadata = {
   description : string option;
   changelog : string option;
 }
-[@@deriving of_yaml]
-
-type t = {
-  title : string;
-  date : string;
-  slug : string;
-  tags : string list;
-  changelog_html : string option;
-  body_html : string;
-  body : string;
-  authors : string list;
-}
 [@@deriving
-  stable_record ~version:metadata ~add:[ changelog; description ]
-    ~modify:[ authors ]
-    ~remove:[ slug; changelog_html; body_html; body; date ],
-    show { with_path = false }]
+  of_yaml,
+    stable_record ~version:t ~remove:[ changelog; description ]
+      ~modify:[ authors ]
+      ~add:[ slug; changelog_html; body_html; body; date ]]
 
-let of_metadata m = of_metadata m ~modify_authors:(Option.value ~default:[])
+let of_metadata m = metadata_to_t m ~modify_authors:(Option.value ~default:[])
 
 let re_date_slug =
   let open Re in
@@ -86,62 +76,32 @@ let decode (fname, (head, body)) =
     metadata
 
 let all () =
-  Utils.map_files decode "changelog/*/*.md"
+  Utils.map_md_files decode "changelog/*/*.md"
   |> List.sort (fun a b -> String.compare b.slug a.slug)
 
 module ChangelogFeed = struct
-  let create_changelog_feed () =
-    let id = Uri.of_string "https://ocaml.org/changelog.xml" in
-    let title : Syndic.Atom.title = Text "OCaml Changelog" in
-    let now = Ptime.of_float_s (Unix.gettimeofday ()) |> Option.get in
-    let cutoff_date =
-      Ptime.sub_span now (Ptime.Span.v (365, 0L)) |> Option.get
-    in
-
-    let entries =
-      all ()
-      |> List.map (fun (log : t) ->
-             let content = Syndic.Atom.Html (None, log.body_html) in
-             let id =
-               Uri.of_string ("https://ocaml.org/changelog/" ^ log.slug)
-             in
-             let authors = (Syndic.Atom.author "Ocaml.org", []) in
-             let updated =
-               Syndic.Date.of_rfc3339 (log.date ^ "T00:00:00-00:00")
-             in
-             Syndic.Atom.entry ~content ~id ~authors
-               ~title:(Syndic.Atom.Text log.title) ~updated
-               ~links:[ Syndic.Atom.link id ]
-               ())
-      |> List.filter (fun (entry : Syndic.Atom.entry) ->
-             Ptime.is_later entry.updated ~than:cutoff_date)
-      |> List.sort Syndic.Atom.descending
-    in
-
-    let updated = (List.hd entries).updated in
-    Syndic.Atom.feed ~id ~title ~updated entries
+  let create_entry (log : t) =
+    let content = Syndic.Atom.Html (None, log.body_html) in
+    let id = Uri.of_string ("https://ocaml.org/changelog/" ^ log.slug) in
+    let authors = (Syndic.Atom.author "Ocaml.org", []) in
+    let updated = Syndic.Date.of_rfc3339 (log.date ^ "T00:00:00-00:00") in
+    Syndic.Atom.entry ~content ~id ~authors ~title:(Syndic.Atom.Text log.title)
+      ~updated
+      ~links:[ Syndic.Atom.link id ]
+      ()
 
   let create_feed () =
-    create_changelog_feed () |> Syndic.Atom.to_xml
-    |> Syndic.XML.to_string ~ns_prefix:(fun s ->
-           match s with "http://www.w3.org/2005/Atom" -> Some "" | _ -> None)
+    let open Rss in
+    () |> all
+    |> create_feed ~id:"changelog.xml" ~title:"OCaml Changelog" ~create_entry
+         ~span:365
+    |> feed_to_string
 end
 
 let template () =
-  Format.asprintf
-    {|
-type t =
-  { title : string
-  ; slug : string
-  ; date : string
-  ; tags : string list
-  ; changelog_html : string option
-  ; body_html : string
-  ; body : string
-  ; authors : string list
-  }
-  
+  Format.asprintf {ocaml|
+include Data_intf.Changelog
 let all = %a
-|}
+|ocaml}
     (Fmt.brackets (Fmt.list pp ~sep:Fmt.semi))
     (all ())
