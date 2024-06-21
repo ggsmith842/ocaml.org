@@ -224,7 +224,7 @@ categories:
       slug: make-http-get-request
       description: >
         Make an HTTP GET request, process response code, follow redirects
-    - title: Make a HTTP GET Request with Basic Authentication
+    - title: Make an HTTP GET Request with Basic Authentication
       slug: make-http-get-basic-auth
     - title: Download a File to a Temporary Directory
       slug: download-file-to-temporary-dir
