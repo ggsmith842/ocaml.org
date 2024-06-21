@@ -33,17 +33,17 @@ open Cohttp_lwt_unix
 sure to review the API's documentation on what it expects to receive*)
 let message_body = ref "{\"body\":\"This is a good issue to work on!\"}"
 
-(* `request_body` contains our API endpoint `uri`. This example uses the Github issue comments
-api endpoint. You will need to fill in `<username>`, `<respository>`, and `<issue number>` with 
-your own information from Github.*)
+(* `request_body` contains our API endpoint `uri`. This example uses the GitHub issue comments
+API endpoint. You will need to fill in `<username>`, `<respository>`, and `<issue number>` with 
+your own information from GitHub.*)
 let request_body =
   let uri =
     Uri.of_string
       "https://api.github.com/repos/<username>/<repository>/issues/<issue number>/comments"
   in
   (* define headers using `Header.init` and `Header.add`. Since we are using Bearer Token authentication,
-  we need to add the `Authorization` header which has the form `Bearer <your token>`. Please ensure you always
-  keep your token secret. You can refer to the `read-environment-variable` section in the  cookbook for one way to protect
+  we need to add the `Authorization` header, which has the form `Bearer <your token>`. Please ensure you always
+  keep your token secret. You can refer to the `read-environment-variable` section in the cookbook for one way to protect
   your token*)
   let headers =
     Header.init ()
@@ -53,9 +53,9 @@ let request_body =
     Header.add h "Authorization" "Bearer <your token goes here>"
     |> fun h -> Header.add h "X-GitHub-Api-Version" "2022-11-28"
   in
-  (* initialize the `body` to contain the json formatted text defined earlier in `message_body`. We tell the client
+  (* initialise the `body` to contain the JSON formatted text defined earlier in `message_body`. We tell the client
   we are making a `POST` call and pass the headers and body. `Client.call` performs the operation 
-  and returns a  `response` and a `code` to let us know if our call worked as expected (i.e. 201 means the call created a resource). *)
+  and returns a  `response` and a `code` to let us know if our call worked as expected (i.e., 201 means the call created a resource). *)
   let body = Cohttp_lwt.Body.of_string !message_body in
   Client.call ~headers ~body `POST uri
   >>= fun (response, body) ->
