@@ -231,7 +231,9 @@ categories:
     - title: Make a Partial Download with HTTP Range Header
       slug: make-partial-download-with-http-range-header
     - title: Make a HTTP POST Request with Bearer Token Authentication
-      slug: make-http-post-request-token-auth
+      slug: make-http-post-request-bearer-auth
+      description: >
+        Make an HTTP POST request then print response code and body
   - title: Dealing with HTML
     tasks:
     - title: Render a HTML Template
