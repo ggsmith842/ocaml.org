@@ -64,7 +64,3 @@ let () =
   let response_code, response_body = Lwt_main.run request_body in
   Printf.printf "Respose code: %d\n" response_code;
   Printf.printf "Response body: %s\n" response_body
-
-
-
-
