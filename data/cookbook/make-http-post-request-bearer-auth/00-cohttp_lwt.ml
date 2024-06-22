@@ -1,16 +1,24 @@
 ---
 packages:
-- name: "lwt"
-  tested_version: "5.7.0"
-- name: "cohttp" 
-  tested_version: "5.3.1"
-- name: "cohttp-lwt-unix"
-  tested_version: "5.3.1"
-- name: "tls-lwt"
-  tested_version: "0.17.5"
+  - name: "lwt"
+    tested_version: "5.7.0"
+    used_libraries:
+      - lwt
+  - name: "cohttp"
+    tested_version: "5.3.1"
+    used_libraries:
+      - cohttp
+  - name: "cohttp-lwt-unix"
+    tested_version: "5.3.1"
+    used_libraries:
+      - cohttp-lwt-unix
+  - name: "tls-lwt"
+    tested_version: "0.17.5"
+    used_libraries:
+      - tls-lwt
 discussion: |
   - **REST API Operations - POST:** A `POST` operation creates a *new* resouce. Example: Add data to a database
-  - **SSL-TLS Exception:** Running this example may result in an error: `Exception: Failure “No SSL or TLS support compiled into Conduit`. To resolve this issue you can run `opam install tls-lwt`
+  - **SSL-TLS Exception:** Running this example may result in an error: `Exception: Failure No SSL or TLS support compiled into Conduit`. To resolve this issue you can run `opam install tls-lwt`
   - **Reference:** The code below uses the GitHub REST API as an example. Please review the documentation here: [github.com/restap/issues/comments](https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#create-an-issue-comment)
 ---
 
