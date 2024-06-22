@@ -12,16 +12,11 @@ packages:
   tested_version: "5.3.1"
   used_libraries:
   - cohttp-lwt-unix
-- name: "tls"
-  tested_version: "0.17.5"
 - name: "tls-lwt"
   tested_version: "0.17.5"
-- name: "ssl"
-  tested_version: "0.7.0"
 discussion: |
   - **REST API Operations - POST:** A `POST` operation creates a *new* resouce. Ex. Add data to a database.
-  - **SSL/TLS Note:** Running this example may result in an error: `Exception: Failure “No SSL or TLS support compiled into Conduit`.
-    To resolve this issue you can run `opam install ssl tls-lwt`
+  - **SSL/TLS Note:** Running this example may result in an error: `Exception: Failure “No SSL or TLS support compiled into Conduit`. To resolve this issue you can run `opam install tls-lwt`
   - **The code below uses the GitHub REST API as an example. Please review the documentation here: [github.com/restap/issues/comments](https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#create-an-issue-comment)
 ---
 
@@ -61,7 +56,7 @@ let request_body =
   >>= fun (response, body) ->
   let code = response |> Response.status |> Code.code_of_status in
   body |> Cohttp_lwt.Body.to_string >|= fun body -> code, body
-;;
+
 
 (* `Lwt_main.run` executes our call defined in the `request_body` and then
   we print the `response_code` and the `response_body` *)
@@ -69,7 +64,7 @@ let () =
   let response_code, response_body = Lwt_main.run request_body in
   Printf.printf "Respose code: %d\n" response_code;
   Printf.printf "Response body: %s\n" response_body
-;;
+
 
 
 
