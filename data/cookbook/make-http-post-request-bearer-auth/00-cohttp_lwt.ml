@@ -2,16 +2,10 @@
 packages:
 - name: "lwt"
   tested_version: "5.7.0"
-  used_libraries:
-  - lwt
 - name: "cohttp" 
   tested_version: "5.3.1"
-  used_libraries:
-  - cohttp
 - name: "cohttp-lwt-unix"
   tested_version: "5.3.1"
-  used_libraries:
-  - cohttp-lwt-unix
 - name: "tls-lwt"
   tested_version: "0.17.5"
 discussion: |
