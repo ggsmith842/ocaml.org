@@ -5,7 +5,7 @@ packages:
     used_libraries:
       - lwt
   - name: "lwt_ppx"
-    tested_version: "5.7.0"
+    tested_version: "2.1.0"
     used_libraries:
       - lwt_ppx
   - name: "cohttp"
