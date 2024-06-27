@@ -4,6 +4,10 @@ packages:
     tested_version: "5.7.0"
     used_libraries:
       - lwt
+  - name: "lwt_ppx"
+    tested_version: "5.7.0"
+    used_libraries:
+      - lwt_ppx
   - name: "cohttp"
     tested_version: "5.3.1"
     used_libraries:
@@ -16,56 +20,41 @@ packages:
     tested_version: "0.17.5"
     used_libraries:
       - tls-lwt
-discussion: |
-  - **REST API Operations - PATCH:** A `PATCH` operation updates an *existing* resouce. Example: Change an account balance for a customer
+discussion: |  
   - **SSL-TLS Exception:** Running this example may result in an error: `Exception: Failure No SSL or TLS support compiled into Conduit`. To resolve this issue you can run `opam install tls-lwt`
   - **Reference:** The code below uses the GitHub REST API as an example. Please review the documentation here: [github.com/restap/issues/comments](https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#create-an-issue-comment)
 ---
 
-open Lwt
+open Lwt.Syntax
 open Cohttp
 open Cohttp_lwt_unix
 
-(* create the message payload for our PATCH request. This can vary from API to API so be
-sure to review the API's documentation on what it expects to receive*)
+(* create the message payload for our PATCH request.*)
 let message_body = ref "{\"body\":\"Updated with the Github REST API!\"}"
 
 (* 
-
-`request_body` contains our API endpoint `uri`. This example uses the GitHub issue comments
-API endpoint. You will need to fill in `<username>`, `<respository>`, and `<comment_id>` with 
-your own information from GitHub.
-
-Define headers using `Header.init` and `Header.add`. Since we are using Bearer Token authentication, we need to add the `Authorization` header, which has the form `Bearer <your token>`. 
-  
-Ensure you always keep your token secret. You can refer to the `read-environment-variable` section in the cookbook for one way to protect your token.
-
-Initialise the `body` to contain the JSON formatted text defined earlier in `message_body`. We tell the client we are making a `PATCH` call and pass the headers and body. 
-`Client.call` performs the operation and returns a  `response` and a `code` to let us know if our call worked as expected (i.e., 201 means the call created a resource).  
-
-If you have already read the POST cookbook recipe, you will notice we only needed to change the `POST` to `PATCH` in our code. 
+Since we are using Bearer Token authentication, we need to add the `Authorization` header, which has the form `Bearer <your token>`. 
+Ensure you always keep your token secret.
 *)
 let request_body =
   let uri =
     Uri.of_string "https://api.github.com/repos/<username>/<repo>/issues/comments/<comment_id>" 
   in
+  let header_add s1 s2 h = Header.add h s1 s2 in
   let headers =
     Header.init ()
-    |> fun h ->
-    Header.add h "Accept" "application/vnd.github+json"
-    |> fun h ->
-    Header.add h "Authorization" "Bearer <your token here>"
-    |> fun h -> Header.add h "X-GitHub-Api-Version" "2022-11-28"
+    |> header_add "Accept" "application/vnd.github+json"
+    |> header_add "Authorization" "Bearer <your token here>"
+    |> header_add "X-GitHub-Api-Version" "2022-11-28"
   in
   let body = Cohttp_lwt.Body.of_string !message_body in
-  Client.call ~headers ~body `PATCH uri
-  >>= fun (response, body) ->
-  let code = response |> Response.status |> Code.code_of_status in
-  body |> Cohttp_lwt.Body.to_string >|= fun body -> code, body
 
+  let* resp, resp_body = Client.call ~headers ~body `PATCH uri in
+  let code = resp |> Response.status |> Code.code_of_status in
+  let+ body = Cohttp_lwt.Body.to_string resp_body in
+  code, body
 
-(* `Lwt_main.run` executes our call defined in the `request_body` and then
-  we print the `response_code` and the `response_body` *)
+(* Example usage to print response code and response body *)
 let () =
   let response_code, response_body = Lwt_main.run request_body in
   Printf.printf "Respose code: %d\n" response_code;
