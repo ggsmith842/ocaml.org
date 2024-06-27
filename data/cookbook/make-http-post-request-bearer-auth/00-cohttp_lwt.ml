@@ -26,7 +26,7 @@ open Lwt
 open Cohttp
 open Cohttp_lwt_unix
 
-(* create the message payload for our POST request. This can vary from API to API so be
+(* Create POST request message payload. This can vary from API to API so be
 sure to review the API's documentation on what it expects to receive*)
 let message_body = ref "{\"body\":\"This is a good issue to work on!\"}"
 

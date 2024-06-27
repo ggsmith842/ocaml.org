@@ -233,7 +233,7 @@ categories:
     - title: Make an HTTP POST Request with Bearer Token Authentication
       slug: make-http-post-request-bearer-auth
       description: >
-        Make an HTTP POST request to create a resource then print response code and body
+        Make an HTTP POST request to create a resource
     - title: Make an HTTP PATCH Request with Bearer Token Authentication
       slug: make-http-patch-request-bearer-auth
       description: >
