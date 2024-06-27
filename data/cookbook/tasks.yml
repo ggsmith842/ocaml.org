@@ -237,7 +237,7 @@ categories:
     - title: Make an HTTP PATCH Request with Bearer Token Authentication
       slug: make-http-patch-request-bearer-auth
       description: >
-        Make an HTTP PATCH request to update a resource then print response code and body
+        Make an HTTP PATCH request to update a resource 
   - title: Dealing with HTML
     tasks:
     - title: Render a HTML Template
